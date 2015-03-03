@@ -1,13 +1,7 @@
 require 'ftpmvc'
 require 'ftpmvc/async/upload'
-require 'ftpmvc/test_helpers'
-require 'resque_spec'
 
 describe 'Async Upload' do
-  include FTPMVC::TestHelpers
-  before do
-    ResqueSpec.reset!
-  end
   let(:etc_dir_class) do
     Class.new(FTPMVC::Directory) do
       attr_reader :received

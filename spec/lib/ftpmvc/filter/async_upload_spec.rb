@@ -1,5 +1,4 @@
 require 'tmpdir'
-require 'resque_spec'
 require 'ftpmvc/filter/async_upload'
 require 'ftpmvc/async/upload/job'
 require 'ftpmvc/async/upload/config'
@@ -9,9 +8,6 @@ describe FTPMVC::Filter::AsyncUpload do
   let(:storage) { Dir.mktmpdir }
   let(:filter) { FTPMVC::Filter::AsyncUpload.new(nil, nil) }
   let(:job_class) { Class.new { @queue = :ftpmvc } }
-  before do
-    ResqueSpec.reset!
-  end
   around do |example|
     job = job_class
     Dir.mktmpdir do |dir|
