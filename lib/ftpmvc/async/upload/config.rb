@@ -7,6 +7,7 @@ module FTPMVC
       class Config < Configurable
         config.dir = Dir.tmpdir
         config.job = nil
+        config.driver = Vfs::Drivers::Local.new
       end
 
       def self.configure(&block)

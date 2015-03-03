@@ -9,7 +9,7 @@ module FTPMVC
   module Async
     module Upload
       def self.storage
-        FTPMVC::Async::Upload.config.dir.to_dir
+        Vfs::Entry.new(FTPMVC::Async::Upload.config.driver, FTPMVC::Async::Upload.config.dir).dir
       end
     end
   end

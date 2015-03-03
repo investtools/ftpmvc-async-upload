@@ -20,10 +20,10 @@ Gem::Specification.new do |spec|
 
   spec.add_development_dependency "bundler", "~> 1.7"
   spec.add_development_dependency "rake", "~> 10.0"
-  spec.add_development_dependency "vfs"
   spec.add_development_dependency "guard-rspec"
   spec.add_development_dependency "resque_spec"
   spec.add_dependency "ftpmvc", ">= 0.9.0"
   spec.add_dependency "resque"
   spec.add_dependency "app"
+  spec.add_dependency "vfs"
 end
