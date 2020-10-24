@@ -1,15 +1,17 @@
 require 'ftpmvc/async/upload/job'
 require 'ftpmvc/async/upload/config'
+require 'sidekiq/worker'
 
 module FTPMVC
   module Async
     module Upload
       class DefaultJob
-        @queue = :ftpmvc
-        
-        extend Job
+        include Sidekiq::Worker
+        include Job
 
-        def self.perform(path, id)
+        sidekiq_options queue: 'ftpmvc'
+
+        def perform(path, id)
           FTPMVC::Async::Upload.config.application.put(path, input(id))
         end
       end

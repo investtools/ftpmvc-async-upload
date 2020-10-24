@@ -34,8 +34,7 @@ describe FTPMVC::Async::Upload::DefaultJob do
   end
   describe '.perform' do
     it 'calls Application#put' do
-
-      FTPMVC::Async::Upload::DefaultJob.perform('/etc/hosts', '123456')
+      FTPMVC::Async::Upload::DefaultJob.new.perform('/etc/hosts', '123456')
       expect(etc_dir.received).to eq ['hosts', '127.0.0.1 localhost']
     end
   end
