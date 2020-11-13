@@ -28,27 +28,24 @@ describe 'Async Upload' do
     end
   end
   it 'delegates the put command to the job' do
-    with_resque do
+    Sidekiq::Testing.inline! do
       with_application(app) do |ftp|
         ftp.login
         put(ftp, '/etc/hosts', '127.0.0.1 localhost')
-        expect(etc_dir.received).to eq ['hosts', "127.0.0.1 localhost\n"]
+        expect(etc_dir.received).to eq(['hosts', "127.0.0.1 localhost\n"])
       end
     end
   end
   context 'when job is custom' do
     let(:my_job_class) do
-      Class.new do
-        extend FTPMVC::Async::Upload::Job
-
-        @queue = :ftpmvc
-
-        def self.perform(path, id)
-          @result = input(id).read_all
+      Class.new(FTPMVC::Async::Upload::DefaultJob) do
+        def perform(_path, id)
+          self.class.result = input(id).read_all
         end
 
-        def self.result
-          @result
+        class << self
+          attr_writer :result
+          attr_reader :result
         end
       end
     end
@@ -59,11 +56,11 @@ describe 'Async Upload' do
       end
     end
     it 'uses that job' do
-      with_resque do
+      Sidekiq::Testing.inline! do
         with_application(app) do |ftp|
           ftp.login
           put(ftp, '/etc/hosts', '127.0.0.1 localhost')
-          expect(MyJob.result).to eq "127.0.0.1 localhost\n"
+          expect(MyJob.result).to eq("127.0.0.1 localhost\n")
         end
       end
     end
